@@ -1,0 +1,25 @@
+@use "../presets/variables" as *;
+@use "../presets/skin" as *;
+
+%container {
+  max-width: $ul;
+
+  margin: 0 auto;
+  padding: 0 $gap;
+}
+
+%input-style {
+  width: 100%;
+  min-height: $btn-hight;
+  padding: 0 30px 0 30px;
+
+  letter-spacing: 0.11em;
+
+  border: 2px solid rgba($color-light, 0);
+  border-bottom: 2px solid rgba($color-light, 0.2);
+
+  font-family: $font-main;
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 2.166em;
+}
