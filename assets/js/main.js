@@ -3,6 +3,7 @@ import {btnPlay, btnPause, slides, btnIndicators} from "./elements.js";
 let currentSlide = 0
 let idInterval = null
 const interval = 1500
+let playNow = false
 
 export const createElements = ({
                                  type: type,
@@ -68,9 +69,10 @@ export function nextSlide() {
   nthSlide(currentSlide + 1)
 }
 
-export function tick() {
+function tick() {
   nthSlide(currentSlide + 1)
   showBtnPause()
+  playNow = true
 }
 
 export function prevSlide() {
@@ -81,6 +83,23 @@ export function prevSlide() {
 export function pause() {
   clearInterval(idInterval)
   showBtnPlay()
+  playNow = false
+}
+
+function keyAction(e) {
+  const {code} = e
+  console.log(code);
+  switch (code) {
+    case 'Space':
+      playNow ? pause() : play()
+      break
+    case 'ArrowLeft':
+      prevSlide()
+      break
+    case 'ArrowRight':
+      nextSlide()
+      break
+  }
 }
 
 export function play() {
@@ -91,3 +110,5 @@ export function play() {
 export function initSlider() {
   return idInterval = setInterval(tick, interval)
 }
+
+document.addEventListener('keydown', keyAction)
