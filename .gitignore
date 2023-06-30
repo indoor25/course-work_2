@@ -1,4 +1,8 @@
 node_modules/
+temp/
+*.bat
+.vscode/
+
 # IntellijIdea files
 .idea/
 .DS_Store

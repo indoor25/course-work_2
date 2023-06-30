@@ -1,12 +1,42 @@
-const slides = document.querySelectorAll('.slide')
-const btnPlay = document.getElementById('btn-play')
-const btnPause = document.getElementById('btn-pause')
-const btnNext = document.getElementById('btn-next')
-const btnPrev = document.getElementById('btn-prev')
+import {btnPlay, btnPause, slides, btnIndicators} from "./elements.js";
+
 let currentSlide = 0
 let idInterval = null
-const interval = 2000
+const interval = 1500
 
+export const createElements = ({
+                                 type: type,
+                                 attr = {},
+                                 container = null,
+                                 actions = {},
+                                 position = 'append'
+                               }) => {
+  let elem = document.createElement(type)
+  for (const elemKey in attr) {
+    elem.setAttribute(elemKey, attr[elemKey])
+  }
+  if (container) {
+    switch (position) {
+      case 'append':
+        container.append(elem)
+        break
+      case 'prepend':
+        container.prepend(elem)
+        break
+      case 'after':
+        container.after(elem)
+        break
+      case 'before':
+        container.before(elem)
+        break
+    }
+  }
+  if (Object.keys(actions).length !== 0)
+    for (const elemKey in actions) {
+      elem.addEventListener(elemKey, actions[elemKey])
+    }
+  return elem
+}
 
 function showBtnPlay() {
   btnPause.style.display = 'none'
@@ -18,40 +48,46 @@ function showBtnPause() {
   btnPlay.style.display = 'none'
 }
 
-function nextSlide() {
-  pause()
+export function nthSlide(number) {
   slides[currentSlide].classList.toggle('active')
-  currentSlide = (currentSlide + 1) % slides.length
-  console.log(slides.length);
+  btnIndicators[currentSlide].classList.toggle('indicator__active')
+
+  currentSlide = (number) % slides.length
   slides[currentSlide].classList.toggle('active')
-  play()
+  btnIndicators[currentSlide].classList.toggle('indicator__active')
 }
 
-function prevSlide() {
+export function goIndicator(e) {
+  const {target} = e
   pause()
-  slides[currentSlide].classList.toggle('active')
-  if (currentSlide < 1) currentSlide = slides.length
-  currentSlide = (currentSlide - 1) % slides.length
-  slides[currentSlide].classList.toggle('active')
-  play()
+  nthSlide(+target.dataset.numberValue)
 }
 
-function pause() {
+export function nextSlide() {
+  pause()
+  nthSlide(currentSlide + 1)
+}
+
+export function tick() {
+  nthSlide(currentSlide + 1)
+  showBtnPause()
+}
+
+export function prevSlide() {
+  pause()
+  nthSlide((currentSlide < 1) ? slides.length - 1 : currentSlide - 1)
+}
+
+export function pause() {
   clearInterval(idInterval)
   showBtnPlay()
 }
 
-function play() {
+export function play() {
   initSlider()
   showBtnPause()
 }
 
-function initSlider() {
-  return idInterval = setInterval(nextSlide, interval)
+export function initSlider() {
+  return idInterval = setInterval(tick, interval)
 }
-
-initSlider()
-btnPause.addEventListener('click', pause)
-btnPlay.addEventListener('click', play)
-btnNext.addEventListener('click', nextSlide)
-btnPrev.addEventListener('click', prevSlide)

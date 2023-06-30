@@ -282,3 +282,27 @@ a {
 
   font-size: 3em;
 }
+.indicators__container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+
+  margin-top: 20px;
+
+  gap: 20px;
+}
+.indicators__item {
+  width: 50px;
+  height: 20px;
+
+  cursor: pointer;
+
+  background-color: #44596e;
+}
+
+.indicator__active {
+  background-color: #d66926;
+}

@@ -92,3 +92,23 @@
 
 .fa-chevron-right {
 }
+
+.indicators {
+  &__container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  &__item {
+    width: 50px;
+    height: 20px;
+    background-color: #44596e;
+    cursor: pointer;
+  }
+}
+
+.indicator__active {
+  background-color: #d66926;
+}

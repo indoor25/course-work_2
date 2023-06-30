@@ -11,35 +11,27 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;300;400;700&family=Roboto:wght@100;300;400;500;700;900&display=swap"
     rel="stylesheet">
-  <!-- Подключаем иконочный шрифт fontawesome -->
-  <link rel="stylesheet" href="libs/@fortawesome/fontawesome-free-6-4-0/css/all.min.css">
+  <!-- Подключаем шрифт fontawesome -->
+  <link rel="stylesheet" href="libs/@fontawesome/fontawesome-free-6-4-0/css/all.min.css">
   <!-- Подключаем наш основной стиль, с которым будем работать -->
   <link rel="stylesheet" href="assets/css/style.css">
   <title>JS slider</title>
 </head>
 
 <body>
-<div id="slides" class="slides">
-  <div class="slide active">Slide 1</div>
-  <div class="slide">Slide 2</div>
-  <div class="slide">Slide 3</div>
-  <div class="slide">Slide 4</div>
-  <div class="slide">Slide 5</div>
-</div>
-
-<div class="btn__controls">
-  <div id="btn-prev" class="btn__control btn__prev"><i class="fa-solid fa-chevron-left"></i></div>
-  <div id="btn-play" class="btn__control btn__play" style="display: none"><i class="fa-regular fa-circle-play"></i>
+<div class="slider__container">
+  <div id="slides" class="slides">
+    <div class="slide active">Slide 1</div>
+    <div class="slide">Slide 2</div>
+    <div class="slide">Slide 3</div>
+    <div class="slide">Slide 4</div>
+    <div class="slide">Slide 5</div>
   </div>
-  <div id="btn-pause" class="btn__control btn__pause"><i class="fa-regular fa-circle-pause"></i></div>
-  <div id="btn-next" class="btn__control btn__next"><i class="fa-solid fa-chevron-right"></i></div>
 </div>
 
 
-<!-- Подключаем библиотеку jquery, необходимую для работы нашего основного скрипта -->
 <script src="libs/jquery/dist/jquery.min.js"></script>
-<!-- Подключаем наш основной скрипт, с которым будем работать -->
-<script src="assets/js/main.js"></script>
+<script src="assets/js/index.js" type="module"></script>
 
 </body>
 
