@@ -1,4 +1,4 @@
-// import {btnPlay, btnPause, slides, btnIndicators} from "./elements.js";
+// import {btnPlay, btnPause, slides, btnIndicators} from "./slider-style.js";
 
 // import {createElements} from './main.js'
 // import {
@@ -20,10 +20,7 @@ export function initSlider(conf) {
   }
 
   if (Object.keys(conf).length === 0) conf = defaultSettings
-  const {autoPlay} = conf
-  const {direction} = conf
-  const {interval} = conf
-  const {container} = conf
+  const {autoPlay, direction, container, interval,} = conf
 
   let sliderElement
   let btnPlay
@@ -80,13 +77,13 @@ export function initSlider(conf) {
   const btnPrev = createElements({
     type: 'div',
     attr: {'id': 'btn-prev', 'class': 'btn__control btn__prev'},
-    container: btnControls,
-    actions: {'click': prevSlide}
+    container: btnControls
   })
   createElements({
     type: 'i',
     attr: {'class': 'fa-solid fa-chevron-left'},
-    container: btnPrev
+    container: btnPrev,
+    actions: {'click': prevSlide}
   })
 
   btnPlay = createElements({
@@ -103,7 +100,7 @@ export function initSlider(conf) {
 
   btnPause = createElements({
     type: 'div',
-    attr: {'id': 'btn-pause', 'class': 'btn__control btn__pause', 'style': 'display: none'},
+    attr: {'id': 'btn-pause', 'class': 'btn__control btn__pause'},
     container: btnControls,
     actions: {'click': pause}
   })
@@ -116,13 +113,13 @@ export function initSlider(conf) {
   btnNext = createElements({
     type: 'div',
     attr: {'id': 'btn-next', 'class': 'btn__control btn__next'},
-    container: btnControls,
-    actions: {'click': nextSlide}
+    container: btnControls
   })
   createElements({
     type: 'i',
     attr: {'class': 'fa-solid fa-chevron-right'},
-    container: btnNext
+    container: btnNext,
+    actions: {'click': nextSlide}
   })
 
   const indicators = createElements({
@@ -148,14 +145,48 @@ export function initSlider(conf) {
     btnIndicators.push(element)
   }
 
-  function showBtnPlay() {
+  function enableBtnPlay() {
     btnPause.style.display = 'none'
     btnPlay.style.display = 'block'
   }
 
-  function showBtnPause() {
+  function enableBtnPause() {
     btnPause.style.display = 'block'
     btnPlay.style.display = 'none'
+  }
+
+  function hideBtnPlay() {
+    btnPlay.style.opacity = 0
+    btnPlay.style.removeProperty('opacity')
+    setTimeout(() => {
+      btnPlay.style.display = 'none'
+      btnPause.style.display = 'block'
+    }, 1100)
+  }
+
+  function showBtnPlay() {
+    btnPlay.style.display = 'block'
+    btnPause.style.display = 'none'
+    btnPlay.style.opacity = 1
+    setTimeout(hideBtnPlay, 1000)
+  }
+
+  function hideBtnPause() {
+    btnPause.style.opacity = 0
+    btnPause.style.removeProperty('opacity')
+    setTimeout(() => {
+      btnPause.style.display = 'none'
+      btnPlay.style.display = 'block'
+    }, 1100)
+  }
+
+  function showBtnPause() {
+    btnPlay.style.display = 'none'
+    btnPause.style.display = 'block'
+    btnPause.style.opacity = 1
+    setTimeout(hideBtnPause, 1000)
+
+
   }
 
   function nthSlide(number) {
@@ -184,7 +215,7 @@ export function initSlider(conf) {
       nthSlide(currentSlide + 1)
     if (direction === 'back')
       nthSlide(currentSlide - 1)
-    showBtnPause()
+    enableBtnPause()
     playNow = true
   }
 
@@ -195,7 +226,7 @@ export function initSlider(conf) {
 
   function pause() {
     clearInterval(idInterval)
-    showBtnPlay()
+    enableBtnPlay()
     playNow = false
   }
 
@@ -203,7 +234,13 @@ export function initSlider(conf) {
     const {code} = e
     switch (code) {
       case 'Space':
-        playNow ? pause() : play()
+        if (playNow) {
+          pause()
+          showBtnPause()
+        } else {
+          play()
+          showBtnPlay()
+        }
         break
       case 'ArrowLeft':
         prevSlide()
@@ -216,7 +253,7 @@ export function initSlider(conf) {
 
   function play() {
     startSlider()
-    showBtnPause()
+    enableBtnPause()
   }
 
   if (autoPlay) play()
