@@ -258,7 +258,7 @@ export function initSlider(conf) {
 
   if (autoPlay) play()
 
-  document.addEventListener('keydown', keyAction)
+  document.addEventListener('keyup', keyAction)
 
   function startSlider() {
     idInterval = setInterval(() => sliderDirection(direction), interval)
