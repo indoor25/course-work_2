@@ -210,7 +210,7 @@ export function initSlider(conf) {
   }
 
 
-  function tick(direction) {
+  function sliderDirection(direction) {
     if (direction === 'forward')
       nthSlide(currentSlide + 1)
     if (direction === 'back')
@@ -261,6 +261,6 @@ export function initSlider(conf) {
   document.addEventListener('keydown', keyAction)
 
   function startSlider() {
-    idInterval = setInterval(() => tick(direction), interval)
+    idInterval = setInterval(() => sliderDirection(direction), interval)
   }
 }
