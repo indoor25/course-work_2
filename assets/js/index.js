@@ -7,6 +7,10 @@ const conf = {
   container: '.slider__container'
 }
 
-initSlider(conf)
+// initSlider(conf)
 
+const slider = new Slider(conf)
+slider.init()
+
+console.log(slider);
 
