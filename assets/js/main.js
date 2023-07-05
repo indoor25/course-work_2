@@ -1,14 +1,5 @@
 // import {btnPlay, btnPause, slides, btnIndicators} from "./slider-style.js";
 
-// import {createElements} from './main.js'
-// import {
-//   play,
-//   prevSlide,
-//   pause,
-//   nextSlide,
-//   goIndicator
-// } from "./main.js";
-
 
 export function initSlider(conf) {
 
