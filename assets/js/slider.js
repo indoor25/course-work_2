@@ -50,7 +50,8 @@ function Slider(conf) {
     }
     if (Object.keys(actions).length !== 0)
       for (const elemKey in actions) {
-        this.elem.addEventListener(elemKey, actions[elemKey])
+        this.handler = actions[elemKey]
+        this.elem.addEventListener(elemKey, this.handler.bind(this))
       }
     return this.elem
   }
@@ -136,8 +137,8 @@ function Slider(conf) {
 Slider.prototype = {
 
   enableBtnPlay() {
-    this.style.display = 'none'
-    this.style.display = 'block'
+    this.btnPause.style.display = 'none'
+    this.btnPlay.style.display = 'block'
   },
 
   enableBtnPause() {
@@ -158,10 +159,11 @@ Slider.prototype = {
     this.btnPlay.style.display = 'block'
     this.btnPause.style.display = 'none'
     this.btnPlay.style.opacity = 1
-    setTimeout(this.hideBtnPlay, 1000)
+    setTimeout(this.hideBtnPlay.bind(this), 1000)
   },
 
   hideBtnPause() {
+    console.log('!!!!!')
     this.btnPause.style.opacity = 0
     this.btnPause.style.removeProperty('opacity')
     setTimeout(() => {
@@ -174,7 +176,7 @@ Slider.prototype = {
     this.btnPlay.style.display = 'none'
     this.btnPause.style.display = 'block'
     this.btnPause.style.opacity = 1
-    setTimeout(this.hideBtnPause, 1000)
+    setTimeout(this.hideBtnPause.bind(this), 1000)
   },
 
   nthSlide(number) {
@@ -259,3 +261,5 @@ Slider.prototype = {
     }
   }
 }
+
+Slider.prototype.constructor = Slider

@@ -1,5 +1,4 @@
 let headDocument = document.querySelector('head')
-console.log(headDocument);
 let style = document.createElement('style')
 style.innerHTML = `
 
