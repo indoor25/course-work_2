@@ -1,4 +1,4 @@
-function Slider(conf) {
+export function Slider(conf) {
   const defaultSettings = {
     autoPlay: true,
     direction: 'forward', //forward or back
@@ -11,12 +11,12 @@ function Slider(conf) {
   this.autoPlay = conf.autoPlay
   this.direction = conf.direction
   this.interval = conf.interval
-  this.sliderElement = document.querySelectorAll('.slide')
   this.sliderContainer = document.querySelector(container)
+  this.slidesContainer = document.querySelector('#slides')
+  this.sliderElement = this.slidesContainer.querySelectorAll('.slide')
   this.SLIDES_LENGTH = this.sliderElement.length
-  // this.btnPlay
-  // this.btnPause
-  // this.btnNext
+  this.positionStart = 0
+  this.positionEnd = 0
   this.btnIndicators = []
   this.currentSlide = 0
   this.idInterval = null
@@ -77,24 +77,24 @@ function Slider(conf) {
     type: 'div',
     attr: {'id': 'btn-play', 'class': 'btn__control btn__play'},
     container: this.btnControls,
-    actions: {'click': this.play}
   })
   createElements({
     type: 'i',
     attr: {'class': 'fa-regular fa-circle-play'},
-    container: this.btnPlay
+    container: this.btnPlay,
+    actions: {'click': this.play}
   })
 
   this.btnPause = createElements({
     type: 'div',
     attr: {'id': 'btn-pause', 'class': 'btn__control btn__pause'},
     container: this.btnControls,
-    actions: {'click': this.pause}
   })
   createElements({
     type: 'i',
     attr: {'class': 'fa-regular fa-circle-pause'},
-    container: this.btnPause
+    container: this.btnPause,
+    actions: {'click': this.pause}
   })
 
   this.btnNext = createElements({
@@ -138,11 +138,11 @@ Slider.prototype = {
 
   enableBtnPlay() {
     this.btnPause.style.display = 'none'
-    this.btnPlay.style.display = 'block'
+    this.btnPlay.style.display = 'flex'
   },
 
   enableBtnPause() {
-    this.btnPause.style.display = 'block'
+    this.btnPause.style.display = 'flex'
     this.btnPlay.style.display = 'none'
   },
 
@@ -151,31 +151,30 @@ Slider.prototype = {
     this.btnPlay.style.removeProperty('opacity')
     setTimeout(() => {
       this.btnPlay.style.display = 'none'
-      this.btnPause.style.display = 'block'
+      this.btnPause.style.display = 'flex'
     }, 1100)
   },
 
   showBtnPlay() {
-    this.btnPlay.style.display = 'block'
+    this.btnPlay.style.display = 'flex'
     this.btnPause.style.display = 'none'
     this.btnPlay.style.opacity = 1
     setTimeout(this.hideBtnPlay.bind(this), 1000)
   },
 
   hideBtnPause() {
-    console.log('!!!!!')
     this.btnPause.style.opacity = 0
     this.btnPause.style.removeProperty('opacity')
     setTimeout(() => {
       this.btnPause.style.display = 'none'
-      this.btnPlay.style.display = 'block'
+      this.btnPlay.style.display = 'flex'
     }, 1100)
   },
 
   showBtnPause() {
     this.btnPlay.style.display = 'none'
-    this.btnPause.style.display = 'block'
-    this.btnPause.style.opacity = 1
+    this.btnPause.style.display = 'flex'
+    this.btnPause.setAttribute('background-color', 'rgba(255, 255, 255, 1)')
     setTimeout(this.hideBtnPause.bind(this), 1000)
   },
 
@@ -245,21 +244,43 @@ Slider.prototype = {
     this.startSlider()
     this.enableBtnPause()
   },
+  swipeStart(e) {
+    if (e instanceof TouchEvent)
+      this.positionStart = e.changedTouches[0].clientX
+    if (!e.button && e instanceof MouseEvent)
+      this.positionStart = e.clientX
+  },
+  swipeEnd(e) {
+    if (e instanceof TouchEvent) {
+      this.positionEnd = e.changedTouches[0].clientX
+      this.swipeMouse()
+    }
+    if (!e.button && e instanceof MouseEvent) {
+      this.positionEnd = e.clientX
+      this.swipeMouse()
+    }
+  },
 
-  addListenerKey() {
+  swipeMouse() {
+    if ((this.positionStart - this.positionEnd) < -100) this.prevSlide()
+    if ((this.positionStart - this.positionEnd) > 100) this.nextSlide()
+  },
+  addListeners() {
     document.addEventListener('keyup', this.keyAction.bind(this))
+    this.btnControls.addEventListener('mousedown', this.swipeStart.bind(this))
+    this.btnControls.addEventListener('mouseup', this.swipeEnd.bind(this))
+    this.btnControls.addEventListener('touchstart', this.swipeStart.bind(this))
+    this.btnControls.addEventListener('touchend', this.swipeEnd.bind(this))
   },
 
   startSlider() {
     this.idInterval = setInterval(() => this.sliderDirection(this.direction), this.interval)
   },
-
   init() {
-    if (this.autoPlay) {
-      this.play()
-      this.addListenerKey()
-    }
-  }
+    if (this.autoPlay) this.play()
+    this.addListeners()
+  },
+  constructor: Slider,
 }
 
-Slider.prototype.constructor = Slider
+

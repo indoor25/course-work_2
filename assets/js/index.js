@@ -1,3 +1,5 @@
+import {Slider} from './slider.js'
+
 const conf = {
   autoPlay: true,
   direction: 'forward', //forward or back
