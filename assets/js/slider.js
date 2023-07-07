@@ -273,9 +273,12 @@ class Slider {
   }
 
   play() {
-    this.idInterval = setInterval(() => this.sliderDirection(this.direction), this.interval)
-    this.enableBtnPause()
-    this.playNow = true
+    if (!this.playNow) {
+      this.idInterval = setInterval(() => this.sliderDirection(this.direction), this.interval)
+      this.enableBtnPause()
+      this.playNow = true
+    }
+
   }
 
   init() {
