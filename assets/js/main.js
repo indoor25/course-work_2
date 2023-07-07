@@ -1,14 +1,3 @@
-// import {btnPlay, btnPause, slides, btnIndicators} from "./slider-style.js";
-
-// import {createElements} from './main.js'
-// import {
-//   play,
-//   prevSlide,
-//   pause,
-//   nextSlide,
-//   goIndicator
-// } from "./main.js";
-
 
 export function initSlider(conf) {
 
@@ -185,8 +174,6 @@ export function initSlider(conf) {
     btnPause.style.display = 'block'
     btnPause.style.opacity = 1
     setTimeout(hideBtnPause, 1000)
-
-
   }
 
   function nthSlide(number) {
@@ -208,7 +195,6 @@ export function initSlider(conf) {
     pause()
     nthSlide(currentSlide + 1)
   }
-
 
   function sliderDirection(direction) {
     if (direction === 'forward')
