@@ -3,17 +3,19 @@ export function Slider(conf) {
     autoPlay: true,
     direction: 'forward', //forward or back
     myInterval: 1500,
-    container: '.slider__container'
+    container: '.slider__container',
+    slidesClass: '.slide'
   }
 
   if (Object.keys(conf).length === 0) conf = defaultSettings
-  const {container} = conf
+  this.slidesClass = conf.slidesClass
+  this.container = conf.container
   this.autoPlay = conf.autoPlay
   this.direction = conf.direction
   this.interval = conf.interval
-  this.sliderContainer = document.querySelector(container)
-  this.slidesContainer = document.querySelector('#slides')
-  this.sliderElement = this.slidesContainer.querySelectorAll('.slide')
+  this.sliderContainer = document.querySelector(this.container)
+  this.slidesContainer = this.sliderContainer.querySelector('#slides')
+  this.sliderElement = this.slidesContainer.querySelectorAll(this.slidesClass)
   this.SLIDES_LENGTH = this.sliderElement.length
   this.positionStart = 0
   this.positionEnd = 0
@@ -21,13 +23,94 @@ export function Slider(conf) {
   this.currentSlide = 0
   this.idInterval = null
   this.playNow = false
-  const createElements = ({
-                            type: type,
-                            attr = {},
-                            container = null,
-                            actions = {},
-                            position = 'append'
-                          }) => {
+
+  this.btnControls = this.createElements({
+    type: 'div',
+    attr: {'class': 'btn__controls'},
+    container: this.sliderContainer
+  })
+
+  this.btnPrev = this.createElements({
+    type: 'div',
+    attr: {'id': 'btn-prev', 'class': 'btn__control btn__prev'},
+    container: this.btnControls
+  })
+  this.createElements({
+    type: 'i',
+    attr: {'class': 'fa-solid fa-chevron-left'},
+    container: this.btnPrev,
+    actions: {'click': this.prevSlide}
+  })
+
+  this.btnPlay = this.createElements({
+    type: 'div',
+    attr: {'id': 'btn-play', 'class': 'btn__control btn__play'},
+    container: this.btnControls,
+  })
+  this.createElements({
+    type: 'i',
+    attr: {'class': 'fa-regular fa-circle-play'},
+    container: this.btnPlay,
+    actions: {'pointerup': this.play}
+  })
+
+  this.btnPause = this.createElements({
+    type: 'div',
+    attr: {'id': 'btn-pause', 'class': 'btn__control btn__pause'},
+    container: this.btnControls,
+  })
+  this.createElements({
+    type: 'i',
+    attr: {'class': 'fa-regular fa-circle-pause'},
+    container: this.btnPause,
+    actions: {'pointerup': this.pause}
+  })
+
+  this.btnNext = this.createElements({
+    type: 'div',
+    attr: {'id': 'btn-next', 'class': 'btn__control btn__next'},
+    container: this.btnControls
+  })
+  this.createElements({
+    type: 'i',
+    attr: {'class': 'fa-solid fa-chevron-right'},
+    container: this.btnNext,
+    actions: {'click': this.nextSlide}
+  })
+
+  this.indicators = this.createElements({
+    type: 'div',
+    attr: {'class': 'indicators__container'},
+    container: this.sliderContainer
+  })
+
+  for (let i = 0; i < this.SLIDES_LENGTH; i++) {
+    let element = this.createElements({
+        type: 'div',
+        container: this.indicators,
+        actions: {'click': this.goIndicator},
+        get attr() {
+          if (i === 0) {
+            return {'class': 'indicators__item indicator__active', 'data-number-value': i}
+          } else {
+            return {'class': 'indicators__item', 'data-number-value': i}
+          }
+        }
+      }
+    )
+    this.btnIndicators.push(element)
+  }
+}
+
+Slider.prototype = {
+
+  createElements({
+                   type: type,
+                   attr = {},
+                   container = null,
+                   actions = {},
+                   position = 'append'
+                 }) {
     this.elem = document.createElement(type)
     for (const elemKey in attr) {
       this.elem.setAttribute(elemKey, attr[elemKey])
@@ -54,87 +137,7 @@ export function Slider(conf) {
         this.elem.addEventListener(elemKey, this.handler.bind(this))
       }
     return this.elem
-  }
-  this.btnControls = createElements({
-    type: 'div',
-    attr: {'class': 'btn__controls'},
-    container: this.sliderContainer
-  })
-
-  this.btnPrev = createElements({
-    type: 'div',
-    attr: {'id': 'btn-prev', 'class': 'btn__control btn__prev'},
-    container: this.btnControls
-  })
-  createElements({
-    type: 'i',
-    attr: {'class': 'fa-solid fa-chevron-left'},
-    container: this.btnPrev,
-    actions: {'click': this.prevSlide}
-  })
-
-  this.btnPlay = createElements({
-    type: 'div',
-    attr: {'id': 'btn-play', 'class': 'btn__control btn__play'},
-    container: this.btnControls,
-  })
-  createElements({
-    type: 'i',
-    attr: {'class': 'fa-regular fa-circle-play'},
-    container: this.btnPlay,
-    actions: {'click': this.play}
-  })
-
-  this.btnPause = createElements({
-    type: 'div',
-    attr: {'id': 'btn-pause', 'class': 'btn__control btn__pause'},
-    container: this.btnControls,
-  })
-  createElements({
-    type: 'i',
-    attr: {'class': 'fa-regular fa-circle-pause'},
-    container: this.btnPause,
-    actions: {'click': this.pause}
-  })
-
-  this.btnNext = createElements({
-    type: 'div',
-    attr: {'id': 'btn-next', 'class': 'btn__control btn__next'},
-    container: this.btnControls
-  })
-  createElements({
-    type: 'i',
-    attr: {'class': 'fa-solid fa-chevron-right'},
-    container: this.btnNext,
-    actions: {'click': this.nextSlide}
-  })
-
-  this.indicators = createElements({
-    type: 'div',
-    attr: {'class': 'indicators__container'},
-    container: this.sliderContainer
-  })
-
-  for (let i = 0; i < this.SLIDES_LENGTH; i++) {
-    let element = createElements({
-        type: 'div',
-        container: this.indicators,
-        actions: {'click': this.goIndicator},
-        get attr() {
-          if (i === 0) {
-            return {'class': 'indicators__item indicator__active', 'data-number-value': i}
-          } else {
-            return {'class': 'indicators__item', 'data-number-value': i}
-          }
-        }
-      }
-    )
-    this.btnIndicators.push(element)
-  }
-}
-
-
-Slider.prototype = {
+  },
 
   enableBtnPlay() {
     this.btnPause.style.display = 'none'
@@ -174,7 +177,7 @@ Slider.prototype = {
   showBtnPause() {
     this.btnPlay.style.display = 'none'
     this.btnPause.style.display = 'flex'
-    this.btnPause.setAttribute('background-color', 'rgba(255, 255, 255, 1)')
+    this.btnPause.style.opacity = 1
     setTimeout(this.hideBtnPause.bind(this), 1000)
   },
 
@@ -198,14 +201,11 @@ Slider.prototype = {
     this.nthSlide(this.currentSlide + 1)
   },
 
-
   sliderDirection(direction) {
     if (direction === 'forward')
       this.nthSlide(this.currentSlide + 1)
     if (direction === 'back')
       this.nthSlide(this.currentSlide - 1)
-    this.enableBtnPause()
-    this.playNow = true
   },
 
   prevSlide() {
@@ -240,10 +240,6 @@ Slider.prototype = {
     }
   },
 
-  play() {
-    this.startSlider()
-    this.enableBtnPause()
-  },
   swipeStart(e) {
     if (e instanceof TouchEvent)
       this.positionStart = e.changedTouches[0].clientX
@@ -273,8 +269,10 @@ Slider.prototype = {
     this.btnControls.addEventListener('touchend', this.swipeEnd.bind(this))
   },
 
-  startSlider() {
+  play() {
     this.idInterval = setInterval(() => this.sliderDirection(this.direction), this.interval)
+    this.enableBtnPause()
+    this.playNow = true
   },
   init() {
     if (this.autoPlay) this.play()
