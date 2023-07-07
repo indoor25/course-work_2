@@ -267,6 +267,8 @@ Slider.prototype = {
     this.btnControls.addEventListener('mouseup', this.swipeEnd.bind(this))
     this.btnControls.addEventListener('touchstart', this.swipeStart.bind(this))
     this.btnControls.addEventListener('touchend', this.swipeEnd.bind(this))
+    this.btnControls.addEventListener('mouseleave', this.play.bind(this))
+    this.btnControls.addEventListener('mouseenter', this.pause.bind(this))
   },
 
   play() {
