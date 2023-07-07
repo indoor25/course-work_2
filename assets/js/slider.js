@@ -278,7 +278,6 @@ class Slider {
       this.enableBtnPause()
       this.playNow = true
     }
-
   }
 
   init() {
