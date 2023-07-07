@@ -8,5 +8,5 @@ export const conf = {
   slidesClass: '.slide'
 }
 
-const slider = new Slider(conf)
+export const slider = new Slider(conf)
 slider.init()

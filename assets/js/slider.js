@@ -2,12 +2,12 @@ export function Slider(conf) {
   const defaultSettings = {
     autoPlay: true,
     direction: 'forward', //forward or back
-    myInterval: 1500,
+    interval: 1500,
     container: '.slider__container',
     slidesClass: '.slide'
   }
 
-  if (Object.keys(conf).length === 0) conf = defaultSettings
+  if (Object.keys(conf).length < 5) conf = defaultSettings
   this.slidesClass = conf.slidesClass
   this.container = conf.container
   this.autoPlay = conf.autoPlay
