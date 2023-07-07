@@ -1,6 +1,6 @@
-import {Slider} from './slider.js'
+import Slider from './slider.js'
 
-export const conf = {
+const conf = {
   autoPlay: true,
   direction: 'forward', //forward or back
   interval: 1500,
@@ -8,5 +8,7 @@ export const conf = {
   slidesClass: '.slide'
 }
 
-const slider = new Slider(conf)
+export const slider = new Slider(conf)
 slider.init()
+
+

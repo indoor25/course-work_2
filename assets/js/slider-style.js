@@ -1,6 +1,6 @@
-import {conf} from "./index.js";
+import {slider} from './index.js'
 
-const slidesClass = conf.slidesClass
+const slidesClass = slider.slidesClass
 let headDocument = document.querySelector('head')
 let style = document.createElement('style')
 style.innerHTML = `
