@@ -1,14 +1,13 @@
-
 export function initSlider(conf) {
 
   const defaultSettings = {
     autoPlay: true,
     direction: 'forward', //forward or back
-    myInterval: 1500,
+    interval: 1500,
     container: '.slider__container'
   }
 
-  if (Object.keys(conf).length === 0) conf = defaultSettings
+  if (Object.keys(conf).length < 4) conf = defaultSettings
   const {autoPlay, direction, container, interval,} = conf
 
   let sliderElement
